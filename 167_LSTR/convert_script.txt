@@ -1,0 +1,174 @@
+xhost +local: && \
+docker run --gpus all -it --rm \
+-v `pwd`:/home/user/workdir \
+-v /tmp/.X11-unix/:/tmp/.X11-unix:rw \
+--device /dev/video0:/dev/video0:mwr \
+--net=host \
+-e XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR \
+-e DISPLAY=$DISPLAY \
+--privileged \
+ghcr.io/pinto0309/openvino2tensorflow:latest
+
+H=180
+W=320
+python3 onnx_optimization.py --onnx_file_path lstr_${H}x${W}.onnx
+H=240
+W=320
+python3 onnx_optimization.py --onnx_file_path lstr_${H}x${W}.onnx
+H=360
+W=640
+python3 onnx_optimization.py --onnx_file_path lstr_${H}x${W}.onnx
+H=480
+W=640
+python3 onnx_optimization.py --onnx_file_path lstr_${H}x${W}.onnx
+H=720
+W=1280
+python3 onnx_optimization.py --onnx_file_path lstr_${H}x${W}.onnx
+
+
+H=180
+W=320
+MODEL=lstr
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP32 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP32
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP16 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP16
+H=240
+W=320
+MODEL=lstr
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP32 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP32
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP16 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP16
+H=360
+W=640
+MODEL=lstr
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP32 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP32
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP16 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP16
+H=480
+W=640
+MODEL=lstr
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP32 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP32
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP16 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP16
+H=720
+W=1280
+MODEL=lstr
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP32 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP32
+$INTEL_OPENVINO_DIR/deployment_tools/model_optimizer/mo.py \
+--input_model ${MODEL}_${H}x${W}.onnx \
+--data_type FP16 \
+--output_dir ${MODEL}_${H}x${W}/openvino/FP16
+
+
+
+H=180
+W=320
+MODEL=lstr
+openvino2tensorflow \
+--model_path ${MODEL}_${H}x${W}/openvino/FP32/${MODEL}_${H}x${W}.xml \
+--output_saved_model \
+--output_pb \
+--output_no_quant_float32_tflite \
+--output_dynamic_range_quant_tflite \
+--output_weight_quant_tflite \
+--output_float16_quant_tflite \
+--output_tfjs \
+--weight_replacement_config replace_${H}x${W}.json
+mv saved_model/* ${MODEL}_${H}x${W}
+mv ${MODEL}_${H}x${W}.onnx ${MODEL}_${H}x${W}
+rm -rf saved_model
+
+
+H=240
+W=320
+MODEL=lstr
+openvino2tensorflow \
+--model_path ${MODEL}_${H}x${W}/openvino/FP32/${MODEL}_${H}x${W}.xml \
+--output_saved_model \
+--output_pb \
+--output_no_quant_float32_tflite \
+--output_dynamic_range_quant_tflite \
+--output_weight_quant_tflite \
+--output_float16_quant_tflite \
+--output_tfjs \
+--weight_replacement_config replace_${H}x${W}.json
+mv saved_model/* ${MODEL}_${H}x${W}
+mv ${MODEL}_${H}x${W}.onnx ${MODEL}_${H}x${W}
+rm -rf saved_model
+
+
+H=360
+W=640
+MODEL=lstr
+openvino2tensorflow \
+--model_path ${MODEL}_${H}x${W}/openvino/FP32/${MODEL}_${H}x${W}.xml \
+--output_saved_model \
+--output_pb \
+--output_no_quant_float32_tflite \
+--output_dynamic_range_quant_tflite \
+--output_weight_quant_tflite \
+--output_float16_quant_tflite \
+--output_tfjs \
+--weight_replacement_config replace_${H}x${W}.json
+mv saved_model/* ${MODEL}_${H}x${W}
+mv ${MODEL}_${H}x${W}.onnx ${MODEL}_${H}x${W}
+rm -rf saved_model
+
+
+H=480
+W=640
+MODEL=lstr
+openvino2tensorflow \
+--model_path ${MODEL}_${H}x${W}/openvino/FP32/${MODEL}_${H}x${W}.xml \
+--output_saved_model \
+--output_pb \
+--output_no_quant_float32_tflite \
+--output_dynamic_range_quant_tflite \
+--output_weight_quant_tflite \
+--output_float16_quant_tflite \
+--output_tfjs \
+--weight_replacement_config replace_${H}x${W}.json
+mv saved_model/* ${MODEL}_${H}x${W}
+mv ${MODEL}_${H}x${W}.onnx ${MODEL}_${H}x${W}
+rm -rf saved_model
+
+
+H=720
+W=1280
+MODEL=lstr
+openvino2tensorflow \
+--model_path ${MODEL}_${H}x${W}/openvino/FP32/${MODEL}_${H}x${W}.xml \
+--output_saved_model \
+--output_pb \
+--output_no_quant_float32_tflite \
+--output_dynamic_range_quant_tflite \
+--output_weight_quant_tflite \
+--output_float16_quant_tflite \
+--output_tfjs \
+--weight_replacement_config replace_${H}x${W}.json
+mv saved_model/* ${MODEL}_${H}x${W}
+mv ${MODEL}_${H}x${W}.onnx ${MODEL}_${H}x${W}
+rm -rf saved_model

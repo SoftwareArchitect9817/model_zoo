@@ -1,0 +1,2 @@
+https://github.com/google/mediapipe/tree/master/mediapipe/modules/holistic_landmark
+https://ai.googleblog.com/2020/12/mediapipe-holistic-simultaneous-face.html

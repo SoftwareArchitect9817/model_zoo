@@ -1,0 +1,4 @@
+https://github.com/openvinotoolkit/open_model_zoo/tree/2021.4.1/demos/human_pose_estimation_3d_demo/python
+https://docs.openvino.ai/2021.4/omz_models_model_human_pose_estimation_3d_0001.html
+https://github.com/terryky/tfjs_webgl_app.git
+https://github.com/PINTO0309/human-pose-estimation-3d-python-cpp

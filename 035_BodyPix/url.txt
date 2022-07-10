@@ -1,0 +1,7 @@
+https://blog.tensorflow.org/2019/11/updated-bodypix-2.html
+https://github.com/patlevin/tfjs-to-tf
+https://qiita.com/PINTO/items/865250ee23a15339d556
+
+https://github.com/Volcomix/virtual-background/issues/11
+
+https://github.com/de-code/python-tf-bodypix
